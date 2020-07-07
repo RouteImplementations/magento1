@@ -1,0 +1,196 @@
+<?php if($this->isRoutePlus() && !$this->isFullCoverage()):?>
+<div id="RouteWidget" style="display: <?php echo $this->getDisplay(); ?>" data-default-checked="<?php echo $this->isEnabledDefaultInsuranceEncoded(); ?>"></div>
+<script src="https://cdn.routeapp.io/route-widget/stable/route-widget-stable.min.js"></script>
+<?php elseif($this->isFullCoverage()):?>
+<div id="RouteFullCoverage" class="route-div"></div>
+<script src="https://cdn.routeapp.io/route-widget-shopify/route-widget-static.min.js"></script>
+<?php endif;?>
+<script>
+    var config = JSON.parse('<?= $this->getConfig(); ?>');
+    var max_retries = 50;
+    var retry = 0;
+
+    function CheckRouteWidget(shipping_method) {
+        if ($('shipping-method-please-wait') !== undefined && $('shipping-method-please-wait') !== null) {
+            $('shipping-method-please-wait').show();
+        }
+        new Ajax.Request(config.controller_widget, {
+            method: 'post',
+            parameters: {"shipping_method": shipping_method},
+            onComplete: function (transport) {
+                try {
+                    let data = transport.responseText.evalJSON();
+                    if (data.show_widget) {
+                        if ($('RouteWidget') !== undefined  && $('RouteWidget') !== null) {
+                            $('RouteWidget').show();
+                        }
+                        if($('RouteFullCoverage') !== undefined && $('RouteFullCoverage') !== null) {
+                            $('RouteFullCoverage').show();
+                        }
+                    } else {
+                        if ($('RouteWidget') !== undefined && $('RouteWidget') !== null) {
+                            $('RouteWidget').hide();
+                        }
+                        if($('RouteFullCoverage') !== undefined && $('RouteFullCoverage') !== null) {
+                            $('RouteFullCoverage').hide();
+                        }
+                    }
+                    if ($('shipping-method-please-wait') !== undefined && $('shipping-method-please-wait') !== null) {
+                        $('shipping-method-please-wait').hide();
+                    }
+                } catch(e) {
+                    //console.log(e);
+                }
+            }
+        });
+    }
+
+    function addButtonListeners(type, mainElementId, mainElementClass, buttonClass) {
+        let shippingMethod='';
+        let shippingBlock='';
+        let shippingMethodCheckbox='';
+        switch(type) {
+            case 'idev_onestepcheckout':
+                shippingMethod = document.getElementsByClassName(mainElementId);
+                if (shippingMethod[0]) {
+                    shippingBlock = shippingMethod[0].getElementsByClassName(mainElementClass);
+                    if (shippingBlock[0]) {
+                        shippingMethodCheckbox = shippingBlock[0].getElementsByClassName(buttonClass);
+                        if(shippingMethodCheckbox) {
+                            addListeners(shippingMethodCheckbox);
+                        }
+                    }
+                }
+                break;
+            default:
+                shippingMethod = document.getElementById(mainElementId).getElementsByClassName(mainElementClass);
+                if (shippingMethod[0]) {
+                    shippingMethodCheckbox = shippingMethod[0].getElementsByClassName(buttonClass);
+                    if (shippingMethodCheckbox) {
+                        addListeners(shippingMethodCheckbox);
+                    }
+                }
+        }
+
+    }
+
+    function addListeners(shippingMethodCheckbox) {
+        for (i = 0; i < shippingMethodCheckbox.length; i++) {
+            shippingMethodCheckbox[i].addEventListener('click', function(){
+                CheckRouteWidget(this.value);
+            });
+        }
+    }
+
+    //GENERAL CHECKOUT LISTENER
+    if ($('checkout-shipping-method-load') !== undefined && $('checkout-shipping-method-load') !== null) {
+        addButtonListeners( 'general',
+                            'checkout-shipping-method-load',
+                            'sp-methods',
+                            'shipping_method_shq');
+        addButtonListeners( 'general',
+                            'checkout-shipping-method-load',
+                            'sp-methods',
+                            'radio');
+    }
+
+    //CUSTOM LISTENER FOR AW ONESTEPCHECKOUT
+    if(typeof AWOnestepcheckoutCore != "undefined" && typeof window.awOSCShipment == "object") {
+        var interval = setInterval(function() {
+            if($('aw-onestepcheckout-shipping-method') !== undefined && $('aw-onestepcheckout-shipping-method') !== null) {
+                let shippingMethods = document.getElementById('aw-onestepcheckout-shipping-method').getElementsByClassName('sp-methods');
+                if (shippingMethods[0]) {
+                    let shippingMethodCheckbox = shippingMethods[0].getElementsByClassName('radio');
+                    if (shippingMethodCheckbox) {
+                        addListeners(shippingMethodCheckbox);
+                    }
+                    clearInterval(interval);
+                }
+            }
+            if (retry === max_retries) {
+                clearInterval(interval);
+            }
+            retry++;
+        }, 500);
+    }
+
+    //CUSTOM LISTENER FOR IDEV ONESTEPCHECKOUT
+    if(typeof get_separate_save_methods_function == "function"){
+        addButtonListeners( 'idev_onestepcheckout',
+                            'onestepcheckout-shipping-method',
+                            'shipment-methods',
+                            'validate-one-required-by-name');
+    }
+
+    //CUSTOM LISTENER FOR MAGESTORE ONESTEPCHECKOUT
+    if(typeof save_shipping_method == "function") {
+        if ($('onestepcheckout-shipping-method-section') !== undefined) {
+            addButtonListeners( 'magestore_onestepcheckout',
+                                'onestepcheckout-shipping-method-section',
+                                'sp-methods',
+                                'radio');
+        }
+    }
+
+    //CUSTOM LISTENER FOR IWD ONESTEPCHECKOUT
+    if(typeof document.getElementsByClassName('iwd_opc_wrapper') == "object" && typeof ShippingMethod == "function"){
+        var interval = setInterval(function() {
+            let shippingSelector = document.getElementById('iwd_opc_shipping_method_group_select');
+            if (shippingSelector) {
+                shippingSelector.addEventListener('change', function(){
+                    CheckRouteWidget(this.value);
+                });
+                clearInterval(interval);
+            }
+            if (retry === max_retries) {
+                clearInterval(interval);
+            }
+            retry++;
+        }, 500);
+    }
+
+    if(typeof routeapp !== 'undefined'){
+        /** Update Route Insurance */
+        function UpdateRouteInsurance(data) {
+            new Ajax.Request(config.controller, {
+                method: 'post',
+                parameters: {"is_route_insured": data.insurance_selected},
+                onComplete: function (transport) {
+                    try {
+                        if (typeof OSCShipment != "undefined") {
+                            OSCShipment.switchToMethod(OSCShipment.currentMethod, 1)
+                        }
+                        if (typeof save_shipping_method == "function") {
+                            save_shipping_method(config.shipping_method_url, config.update_shipping_payment, config.update_shipping_review)
+                        }
+                        if (typeof get_separate_save_methods_function == "function") {
+                            get_separate_save_methods_function(config.set_methods_separate, true)()
+                        }
+                        if (typeof FireCheckout !== 'undefined' && typeof checkout == "object" && typeof checkout.update == "function"){
+                            checkout.update(checkout.urls.shipping_method);
+                        }
+                        if (typeof AWOnestepcheckoutCore != "undefined" && typeof window.awOSCShipment == "object") {
+                            AWOnestepcheckoutCore.updater.startRequest(window.awOSCShipment.saveShipmentUrl, {
+                                method: 'post',
+                                parameters: Form.serialize(window.awOSCShipment.container, true)
+                            });
+                        }
+                        if(typeof document.getElementById('amscheckout-onepage') == "object" && typeof updateCheckout == "function"){
+                            updateCheckout("shipping_method")
+                        }
+                        if(typeof amazonPaymentsMageCheckout != "undefined" && typeof amazonPaymentsMageCheckout.setReview == "function"){
+                            amazonPaymentsMageCheckout.setReview()
+                        }
+                    } catch(e) {
+                        //console.log(e);
+                    }
+                }
+            });
+        }
+
+        routeapp.get_quote(config.token, config.subtotal, config.currency, UpdateRouteInsurance);
+
+        routeapp.on_insured_change(UpdateRouteInsurance);
+    }
+</script>
+

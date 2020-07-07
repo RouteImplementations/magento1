@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <adminhtml_sales_order_view>
+        <reference name="order_totals">
+            <block type="route/sales_order_fee" name="fee" />
+        </reference>
+    </adminhtml_sales_order_view>
+    <adminhtml_sales_order_invoice_new>
+        <reference name="invoice_totals">
+            <block type="route/sales_order_fee" name="fee" />
+        </reference>
+    </adminhtml_sales_order_invoice_new>
+    <adminhtml_sales_order_creditmemo_new>
+        <reference name="creditmemo_totals">
+            <block type="route/sales_order_fee" name="fee" />
+        </reference>
+    </adminhtml_sales_order_creditmemo_new>
+    <adminhtml_sales_order_invoice_view>
+        <reference name="invoice_totals">
+            <block type="route/sales_order_fee" name="fee" />
+        </reference>
+    </adminhtml_sales_order_invoice_view>
+    <adminhtml_sales_order_creditmemo_view>
+        <reference name="creditmemo_totals">
+            <block type="route/sales_order_fee" name="fee" />
+        </reference>
+    </adminhtml_sales_order_creditmemo_view>
+    <adminhtml_sales_order_creditmemo_updateqty>
+        <reference name="creditmemo_totals">
+            <block type="route/sales_order_fee" name="fee" />
+        </reference>
+    </adminhtml_sales_order_creditmemo_updateqty>
+    <default>
+        <reference name="notifications">
+            <block type="route/adminhtml_notification" name="notification_billing"
+                   template="route/notification.phtml"/>
+        </reference>
+    </default>
+    <adminhtml_sales_order_create_load_block_shipping_method>
+        <reference name="content">
+            <reference name="shipping_method">
+                <block type="adminhtml/sales_order_create_shipping_method_form" template="route/sales/order/create/shipping/method/form.phtml" name="form">
+                    <block type="route/adminhtml_sales_order_create_shipping_additional" name="route" as="route" template="route/route.phtml"/>
+                </block>
+            </reference>
+        </reference>
+    </adminhtml_sales_order_create_load_block_shipping_method>
+    <adminhtml_sales_order_create_index>
+        <reference name="root">
+            <reference name="content">
+                <reference name="form">
+                    <reference name="data">
+                        <reference name="shipping_method">
+                            <block type="adminhtml/sales_order_create_shipping_method_form" template="route/sales/order/create/shipping/method/form.phtml" name="form">
+                                <block type="route/adminhtml_sales_order_create_shipping_additional" name="route" as="route" template="route/route.phtml"/>
+                            </block>
+                        </reference>
+                    </reference>
+                </reference>
+            </reference>
+        </reference>
+    </adminhtml_sales_order_create_index>
+    <shipperhq_extend>
+        <reference name="shipping_method">
+            <block name="form" as="form"
+                   type="shipperhq_frontend/adminhtml_sales_order_create_shipping_method_form"
+                   template="route/sales/order/create/shipperhq.phtml">
+                <block type="route/adminhtml_sales_order_create_shipping_additional" name="route" as="route" template="route/route.phtml"/>
+            </block>
+        </reference>
+    </shipperhq_extend>
+    <adminhtml_sales_order_create_load_block_data>
+        <reference name="content">
+            <reference name="data">
+                <reference name="shipping_method">
+                    <block type="adminhtml/sales_order_create_shipping_method_form" template="route/sales/order/create/shipping/method/form.phtml" name="form">
+                        <block type="route/adminhtml_sales_order_create_shipping_additional" name="route" as="route" template="route/route.phtml"/>
+                    </block>
+                </reference>
+            </reference>
+        </reference>
+    </adminhtml_sales_order_create_load_block_data>
+</layout>

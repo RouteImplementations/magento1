@@ -1,0 +1,61 @@
+<?php if($this->isRoutePlus() && !$this->isFullCoverage()):?>
+    <div id="RouteWidget" style="display: <?php echo $this->getDisplay(); ?>" data-default-checked="<?php echo $this->isEnabledDefaultInsuranceEncoded(); ?>"></div>
+    <?php $routeScript = "https://cdn.routeapp.io/route-widget/stable/route-widget-stable.min.js"; ?>
+<?php elseif($this->isFullCoverage()):?>
+    <div id="fullCoverage" class="route-div"></div>
+    <?php $routeScript = "https://cdn.routeapp.io/route-widget-shopify/route-widget-static.min.js"; ?>
+<?php endif;?>
+<script>
+    var config = JSON.parse('<?= $this->getConfig(); ?>');
+
+    function loadScript(url, callback)
+    {
+        var head = document.getElementsByTagName('head')[0];
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = url;
+        script.onreadystatechange = callback;
+        script.onload = callback;
+        head.appendChild(script);
+    }
+
+    var routeCode = function() {
+        if(typeof routeapp !== 'undefined'){
+            /** Update Route Insurance */
+            function UpdateRouteInsurance(data) {
+                new Ajax.Request(config.controller, {
+                    method: 'post',
+                    parameters: {"is_route_insured": data.insurance_selected},
+                    onComplete: function (transport) {
+                        try {
+                            updateTotals();
+                        } catch(e) {
+                            console.log(e);
+                        }
+                    }
+                });
+            }
+
+            routeapp.on_insured_change(UpdateRouteInsurance);
+            routeapp.get_quote(config.token, config.subtotal, config.currency, UpdateRouteInsurance);
+
+            function updateTotals() {
+                // UPDATE TOTALS AREA ONLY
+                var area = ['totals'];
+                // prepare additional fields
+                var fieldsPrepare = {update_items: 1};
+                var info = $('order-items_grid').select('input', 'select', 'textarea');
+                for(var i=0; i<info.length; i++){
+                    if(!info[i].disabled && (info[i].type != 'checkbox' || info[i].checked)) {
+                        fieldsPrepare[info[i].name] = info[i].getValue();
+                    }
+                }
+                fieldsPrepare = Object.extend(fieldsPrepare, order.productConfigureAddFields);
+                order.productConfigureSubmit('quote_items', area, fieldsPrepare);
+            }
+        }
+    };
+
+    loadScript('<?php echo $routeScript; ?>', routeCode);
+</script>
+

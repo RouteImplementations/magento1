@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<widgets>
+    <route_widget type="route/widget" translate="name description" module="route">
+        <name>Route Widget</name>
+        <description>Allow you to add insurance to cart</description>
+    </route_widget>
+</widgets>

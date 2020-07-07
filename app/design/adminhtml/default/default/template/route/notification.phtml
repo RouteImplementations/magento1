@@ -1,0 +1,121 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web:300,400,600,700"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"/>
+<link rel="stylesheet" href="<?php echo $this->getSkinUrl('route/style.css') ?>" type="text/css" media="all" />
+
+<?php if ($this->canShow()): ?>
+    <div class="notification-global notification-global-warning">
+        <strong style="color:red">Important: </strong>
+        <span>Billing Information Required.  Please click <a href="<?php echo $this->getBillingDashboardUrl(); ?>" target="_blank"> here </a>
+ to update your billing information.</span>
+    </div>
+<?php endif; ?>
+
+<?php if ($this->versionUpdateAvailable()): ?>
+    <div class="notification-global notification-global-warning">
+        <strong style="color:red">Important: </strong>
+        <span>Route Module requires an upgrade. Latest version available: <?php echo $this->getVersionUpdate()?>.  Please enter <a href="<?php echo $this->getVersionUpdateUri(); ?>" target="_blank"> here </a>
+ to update Route.</span>
+    </div>
+<?php endif; ?>
+
+<?php if ($this->checkDatabaseSupport()): ?>
+    <div class="notification-global notification-global-warning">
+        <strong style="color:red">Important: </strong>
+        <span>Your database is not compatible with Route Extension or has no support to decimal precision, which is important to proper functioning of it.</span>
+    </div>
+<?php endif; ?>
+
+<?php if($this->hasUserCreationConflicted()): ?>
+<div id="message-popup-window-mask" class="route" style="height: 1234px;"></div>
+<div id="route-login-form">
+    <div class="form-wrapper">
+        <div class="form-container">
+            <div class="form">
+                <p>It looks like your email address is linked to another store in our system.</p>
+                <p>Please sign in below to link this installation with your existing account.</p>
+                <form action="<?= $this->userLoginAction() ?>" method="POST">
+                    <?php echo $this->getBlockHtml('formkey'); ?>
+                    <label class="form-label">Email Address</label>
+                    <span><?= $this->getUsername() ?></span>
+                    <input name="username" type="hidden" value="<?= $this->getUsername() ?>"/>
+                    <label class="form-label">Password</label>
+                    <input class="form-input" name="password" type="password"/>
+                    <span>By proceeding, you are agreeing to our <a href="https://route.com/terms-and-conditions/" class="terms" target="_blank">Terms and Conditions</a></span>
+                    <button><span>Continue</span></button>
+                </form>
+                <p><a href="https://dashboard.route.com/forgot-password" target="_blank">Forgot Password</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
+<script type="text/javascript">
+    function setRouteCookie(name, value, expire)
+    {
+        let date = new Date();
+        date.setTime(date.getTime() + (expire * 24 * 360000));
+        document.cookie = name + "=" + value + "; expires=" + date.toGMTString()+"; path=/";
+    }
+
+    function getRouteCookie(cname)
+    {
+        let name = cname + "=";
+        let allCookieArray = document.cookie.split(';');
+        for(let i=0; i<allCookieArray.length; i++)
+        {
+            let temp = allCookieArray[i].trim();
+            if (temp.indexOf(name)==0)
+                return temp.substring(name.length,temp.length);
+        }
+        return "";
+    }
+</script>
+
+<?php if($this->canShowRedirectAlert()): ?>
+    <div id="message-popup-window-mask"  class="route" style="height: 1234px; display: none;"></div>
+    <div id="message-popup-window" class="message-popup show route" style="display: none;">
+        <div class="message-popup-head">
+            <h2>Route Account Activation</h2>
+        </div>
+        <div class="message-popup-content">
+            <div class="message">
+                <span class="message-icon message-notice" style="background-image:url(http://widgets.magentocommerce.com/1.9.3.7/SEVERITY_NOTICE.gif);">notice</span>
+                <p class="message-text"><?= $this->getMessage() ?><span id="route_counter">5</span></p>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        if(!getRouteCookie('route_installed')) {
+
+            setRouteCookie('route_installed', 1, 360);
+
+            document.getElementById('message-popup-window').style.display = 'block';
+            document.getElementById('message-popup-window-mask').style.display = 'block';
+
+            let intervalId = setInterval(function () {
+                let seconds = document.getElementById("route_counter").innerText;
+                if(seconds > 0) {
+                    document.getElementById("route_counter").innerText = seconds - 1;
+                }else{
+                    clearInterval(intervalId)
+                    window.location = '<?= $this->getRoutePortalUrl() ?>';
+                }
+            },1000)
+        }
+    </script>
+<?php endif; ?>
+
+<?php if($this->hasUserCreationFailed()): ?>
+    <div class="notification-global notification-global-warning">
+        <strong style="color:red">Important: </strong>
+            <span>We couldn't create your user account, please contact our support or <a href="<?php echo $this->tryRecreateUser(); ?>"> try again </a></span>
+    </div>
+<?php endif; ?>
+
+<?php if($this->hasMerchantCreationFailed()): ?>
+    <div class="notification-global notification-global-warning">
+        <strong style="color:red">Important: </strong>
+        <span>Route merchant creation has failed. Please click <a href="<?php echo $this->tryRecreateMerchant(); ?>"> here </a> to retry</span>
+    </div>
+<?php endif; ?>

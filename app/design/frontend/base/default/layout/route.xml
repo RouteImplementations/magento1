@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <sales_order_view>
+        <reference name="order_totals">
+            <block type="route/sales_order_fee" name="route_fee"/>
+        </reference>
+    </sales_order_view>
+    <sales_order_print>
+        <reference name="order_totals">
+            <block type="route/sales_order_fee" name="route_fee" />
+        </reference>
+    </sales_order_print>
+    <sales_email_order_items>
+        <reference name="order_totals">
+            <block type="route/sales_order_fee" name="route_fee" />
+        </reference>
+    </sales_email_order_items>
+    <sales_order_invoice>
+        <reference name="invoice_totals">
+            <block type="route/sales_order_fee" name="route_fee" />
+        </reference>
+    </sales_order_invoice>
+    <sales_order_printinvoice>
+        <reference name="invoice_totals">
+            <block type="route/sales_order_fee" name="route_fee" />
+        </reference>
+    </sales_order_printinvoice>
+    <sales_email_order_invoice_items>
+        <reference name="invoice_totals">
+            <block type="route/sales_order_fee" name="route_fee" />
+        </reference>
+    </sales_email_order_invoice_items>
+    <sales_order_creditmemo>
+        <reference name="creditmemo_totals">
+            <block type="route/sales_order_fee" name="route_fee" />
+        </reference>
+    </sales_order_creditmemo>
+    <sales_order_printcreditmemo>
+        <reference name="creditmemo_totals">
+            <block type="route/sales_order_fee" name="route_fee" />
+        </reference>
+    </sales_order_printcreditmemo>
+    <sales_email_order_creditmemo_items>
+        <reference name="creditmemo_totals">
+            <block type="route/sales_order_fee" name="route_fee" />
+        </reference>
+    </sales_email_order_creditmemo_items>
+    <firecheckout_index_index>
+        <reference name="head">
+            <action method="addItem"><type>skin_css</type><name>route/css/firecheckout.css</name></action>
+        </reference>
+    </firecheckout_index_index>
+    <onestepcheckout_index_index_flat_20columns>
+        <reference name="onestepcheckout_shipping_method">
+            <action method="setTemplate"><template>route/onepage/shipping_wrapper.phtml</template></action>
+            <block type="route/additional" name="route" as="route" template="route/route.phtml"/>
+            <block type="checkout/onepage_shipping_method_available" name="choose-shipping-method-original" template="onestepcheckout/flat/onestepcheckout/shipping_method.phtml"/>
+        </reference>
+    </onestepcheckout_index_index_flat_20columns>
+    <onestepcheckout_index_index_flat_25columns>
+        <reference name="onestepcheckout_shipping_method">
+            <action method="setTemplate"><template>route/onepage/shipping_wrapper.phtml</template></action>
+            <block type="route/additional" name="route" as="route" template="route/route.phtml"/>
+            <block type="checkout/onepage_shipping_method_available" name="choose-shipping-method-original" template="onestepcheckout/flat/onestepcheckout/shipping_method.phtml"/>
+        </reference>
+    </onestepcheckout_index_index_flat_25columns>
+    <onestepcheckout_index_index_flat_30columns>
+        <reference name="onestepcheckout_shipping_method">
+            <action method="setTemplate"><template>route/onepage/shipping_wrapper.phtml</template></action>
+            <block type="route/additional" name="route" as="route" template="route/route.phtml"/>
+            <block type="checkout/onepage_shipping_method_available" name="choose-shipping-method-original" template="onestepcheckout/flatnew/onestepcheckout/shipping_method.phtml"/>
+        </reference>
+    </onestepcheckout_index_index_flat_30columns>
+    <onestepcheckout_index_index_material_20columns>
+        <reference name="onestepcheckout_shipping_method">
+            <action method="setTemplate"><template>route/onepage/shipping_wrapper.phtml</template></action>
+            <block type="route/additional" name="route" as="route" template="route/route.phtml"/>
+            <block type="checkout/onepage_shipping_method_available" name="choose-shipping-method-original" template="onestepcheckout/material/onestepcheckout/shipping_method.phtml"/>
+        </reference>
+    </onestepcheckout_index_index_material_20columns>
+    <onestepcheckout_index_index_material_25columns>
+        <reference name="onestepcheckout_shipping_method">
+            <action method="setTemplate"><template>route/onepage/shipping_wrapper.phtml</template></action>
+            <block type="route/additional" name="route" as="route" template="route/route.phtml"/>
+            <block type="checkout/onepage_shipping_method_available" name="choose-shipping-method-original" template="onestepcheckout/material/onestepcheckout/shipping_method.phtml"/>
+        </reference>
+    </onestepcheckout_index_index_material_25columns>
+    <onestepcheckout_index_index_material_30columns>
+        <reference name="onestepcheckout_shipping_method">
+            <action method="setTemplate"><template>route/onepage/shipping_wrapper.phtml</template></action>
+            <block type="route/additional" name="route" as="route" template="route/route.phtml"/>
+            <block type="checkout/onepage_shipping_method_available" name="choose-shipping-method-original" template="onestepcheckout/material/onestepcheckout/shipping_method.phtml"/>
+        </reference>
+    </onestepcheckout_index_index_material_30columns>
+
+    <onestepcheckout_shipping_payment_review_material_20columns>
+        <block type="checkout/onepage_shipping_method_available" name="onestepcheckout_shipping_method" as="onestepcheckout_shipping_method">
+            <action method="setTemplate"><template>route/onepage/shipping_wrapper.phtml</template></action>
+            <block type="route/additional" name="route" as="route" template="route/route.phtml"/>
+            <block type="checkout/onepage_shipping_method_available" name="choose-shipping-method-original" template="onestepcheckout/material/onestepcheckout/shipping_method.phtml"/>
+        </block>
+        <update handle="onestepcheckout_payment_review_material_20columns"/>
+    </onestepcheckout_shipping_payment_review_material_20columns>
+    <onestepcheckout_shipping_payment_review_flat_30columns>
+        <block type="checkout/onepage_shipping_method_available" name="onestepcheckout_shipping_method" as="onestepcheckout_shipping_method">
+            <action method="setTemplate"><template>route/onepage/shipping_wrapper.phtml</template></action>
+            <block type="route/additional" name="route" as="route" template="route/route.phtml"/>
+            <block type="checkout/onepage_shipping_method_available" name="choose-shipping-method-original" template="onestepcheckout/material/onestepcheckout/shipping_method.phtml"/>
+        </block>
+        <update handle="onestepcheckout_payment_review_material_20columns"/>
+    </onestepcheckout_shipping_payment_review_flat_30columns>
+    <onestepcheckout_shipping_payment_review_flat_20columns>
+        <block type="checkout/onepage_shipping_method_available" name="onestepcheckout_shipping_method" as="onestepcheckout_shipping_method">
+            <action method="setTemplate"><template>route/onepage/shipping_wrapper.phtml</template></action>
+            <block type="route/additional" name="route" as="route" template="route/route.phtml"/>
+            <block type="checkout/onepage_shipping_method_available" name="choose-shipping-method-original" template="onestepcheckout/material/onestepcheckout/shipping_method.phtml"/>
+        </block>
+        <update handle="onestepcheckout_payment_review_material_20columns"/>
+    </onestepcheckout_shipping_payment_review_flat_20columns>
+
+    <onestepcheckout_index_index>
+        <reference name="choose-shipping-method">
+            <action method="setTemplate"><template>route/onepage/shipping_wrapper.phtml</template></action>
+            <block type="checkout/onepage_shipping_method_available" name="choose-shipping-method-original" template="onestepcheckout/shipping_method.phtml"/>
+            <block type="route/additional" name="route" as="route" template="route/route.phtml"/>
+        </reference>
+        <reference name="onestepcheckout.onestep.form.shippingmethod.extra">
+            <action method="setTemplate"><template>route/onepage/shipping_method/additional_wrapper.phtml</template></action>
+            <block type="checkout/onepage_shipping_method_additional" name="onestepcheckout.onestep.form.shippingmethod.extra.original" template="checkout/onepage/shipping_method/additional.phtml"/>
+            <block type="route/additional" name="extra_route" as="extra_route" template="route/route.phtml"/>
+        </reference>
+    </onestepcheckout_index_index>
+    <onestepcheckout_ajax_save_billing>
+        <reference name="choose-shipping-method">
+            <action method="setTemplate"><template>route/onepage/shipping_wrapper.phtml</template></action>
+            <block type="checkout/onepage_shipping_method_available" name="choose-shipping-method-original" template="onestepcheckout/shipping_method.phtml"/>
+            <block type="route/additional" name="route" as="route" template="route/route.phtml"/>
+        </reference>
+    </onestepcheckout_ajax_save_billing>
+    <aw_onestepcheckout_index_index>
+        <reference name="aw_onestepcheckout.onestep.form.shippingmethod">
+            <block type="route/additional" name="extra" as="extra" template="route/route.phtml"/>
+        </reference>
+    </aw_onestepcheckout_index_index>
+    <iwd_opc_index_index>
+        <reference name="iwd_opc.onepage.shipping.method">
+            <action method="setTemplate"><template>route/onepage/shipping_wrapper.phtml</template></action>
+            <block type="iwd_opc/onepage_shipping_method" name="choose-shipping-method-original" template="iwd/opc/onepage/shipping/method.phtml"/>
+            <block type="route/additional" name="route" as="route" template="route/route.phtml"/>
+        </reference>
+    </iwd_opc_index_index>
+</layout>

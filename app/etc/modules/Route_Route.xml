@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Route_Route>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Sales />
+                <Mage_Adminhtml />
+            </depends>
+        </Route_Route>
+    </modules>
+</config>
