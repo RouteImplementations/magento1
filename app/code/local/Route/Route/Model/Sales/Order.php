@@ -77,9 +77,6 @@ class Route_Route_Model_Sales_Order
         $customerLastName = $this->getOrder()->getCustomerLastname() ?
             $this->getOrder()->getCustomerLastname() : $this->getOrder()->getBillingAddress()->getLastname();
 
-        $shippingMethod = $this->getOrder()->getShippingAddress()->getShippingMethod();
-        $isShippingMethodAllowed = Mage::helper('route')->isShippingMethodAllowed($shippingMethod);
-
         $data = [
             "source_order_id" => $this->getOrder()->getIncrementId(),
             "source_order_number"  => $this->getOrder()->getId(),
@@ -89,9 +86,7 @@ class Route_Route_Model_Sales_Order
             "amount_covered" =>  floatval($this->getSubtotalAmount($this->getOrder())),
             "currency" => $this->getOrder()->getOrderCurrencyCode(),
             "taxes" => floatval($this->getOrder()->getTaxAmount()),
-            "insurance_selected" => (Mage::helper('route')->isFullCoverage() || !$isShippingMethodAllowed) ?
-                false :
-                !!$insuranceSelected,
+            "insurance_selected" => $this->isInsuranceSelected($insuranceSelected),
             "customer_details" => [
                 "first_name" => $customerFirstName,
                 "last_name" => $customerLastName,
