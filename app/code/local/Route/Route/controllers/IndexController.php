@@ -212,6 +212,7 @@ class Route_Route_IndexController extends Mage_Core_Controller_Front_Action
             'fresh_new_installation' => $this->_getSetupHelper()->isFreshNewInstallation(),
             'date' => (new DateTime()),
             'is_taxable' => $this->_getRouteHelper()->isTaxable(),
+            'include_order_thank_you_page_widget' => $this->_getRouteHelper()->isIncludesOrderThankYouPageWidget(),
             'payment_tax_class' => $this->_getRouteHelper()->getTaxClassId(),
             'order_status' => $this->_getRouteHelper()->getOrderStatus(),
             'order_status_canceled' => $this->_getRouteHelper()->getOrderStatusCanceled(),

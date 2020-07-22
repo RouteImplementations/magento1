@@ -45,6 +45,11 @@
             <block type="route/sales_order_fee" name="route_fee" />
         </reference>
     </sales_email_order_creditmemo_items>
+    <checkout_onepage_success>
+        <reference name="content">
+            <block type="route/additional" name="external_widget" as="external_widget" template="route/external_widget.phtml"/>
+        </reference>
+    </checkout_onepage_success>
     <firecheckout_index_index>
         <reference name="head">
             <action method="addItem"><type>skin_css</type><name>route/css/firecheckout.css</name></action>

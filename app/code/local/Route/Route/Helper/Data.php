@@ -26,9 +26,6 @@
  */
 class Route_Route_Helper_Data extends Mage_Core_Helper_Abstract
 {
-    const LIVE_API_URL = 'https://api.route.com/v1/';
-    const SANDBOX_API_URL = "https://api-stage.route.com/v1/";
-
     const XML_PATH = 'insurance/route/';
     const MERCHANT_PUBLIC_TOKEN = 'merchant_public_token';
     const MERCHANT_SECRET_TOKEN = 'merchant_secret_token';
@@ -36,6 +33,7 @@ class Route_Route_Helper_Data extends Mage_Core_Helper_Abstract
     const INSURANCE_LABEL = 'insurance_label';
     const CHANGE_GRID = 'change_grid';
     const IS_TAXABLE = 'is_taxable';
+    const INCLUDE_ORDER_THANK_YOU_PAGE_WIDGET = 'include_order_thank_you_page_widget';
     const PAYMENT_TAX_CLASS = 'payment_tax_class';
     const IS_SUPPORTED = 'is_supported';
     const BILLING_INFO_FILLED = 'billing_info';
@@ -283,7 +281,8 @@ class Route_Route_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @return bool
      */
-    public function canAddRouteFee(){
+    public function canAddRouteFee()
+    {
         return $this->getInsured() &&
             $this->isRoutePlus() &&
             $this->isAllowSubtotal() &&
@@ -307,7 +306,7 @@ class Route_Route_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getRouteApiUrl()
     {
-        return self::LIVE_API_URL;
+        return Mage::getModel('route/api_widget')->getRouteApiUrl();
     }
 
     /**
@@ -338,6 +337,15 @@ class Route_Route_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function isTaxable(){
         return (bool) $this->getConfigValue(self::IS_TAXABLE);
+    }
+    
+    /**
+     * Check if the Route order thank you page is enabled
+     *
+     * @return bool
+     */
+    public function isIncludesOrderThankYouPageWidget(){
+        return (bool) $this->getConfigValue(self::INCLUDE_ORDER_THANK_YOU_PAGE_WIDGET);
     }
 
     /**
@@ -526,6 +534,16 @@ class Route_Route_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * @return mixed
+     * @throws Mage_Core_Model_Store_Exception
+     */
+    public function getThankYouPageWidget()
+    {
+        $storeName = parse_url($this->currentStore->getBaseUrl(), PHP_URL_HOST);
+        return Mage::getModel('route/api_widget')->getThankYouPageWidget($storeName);
+    }
+
+    /**
      * @return bool
      * @throws Mage_Core_Model_Store_Exception
      */
@@ -533,6 +551,15 @@ class Route_Route_Helper_Data extends Mage_Core_Helper_Abstract
     {
         if (Mage::app()->getStore()->isAdmin() || Mage::getDesign()->getArea() == 'adminhtml') return true;
         return false;
+    }
+
+    /**
+     * @return bool
+     * @throws Mage_Core_Model_Store_Exception
+     */
+    public function isDevMode()
+    {
+        return getenv("DEV_MODE");
     }
 
     /**

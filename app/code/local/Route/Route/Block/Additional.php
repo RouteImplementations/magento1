@@ -94,6 +94,27 @@ class Route_Route_Block_Additional extends Mage_Checkout_Block_Onepage_Abstract
     }
 
     /**
+     * Is Route included on  order thank you page
+     *
+     * @return bool
+     */
+    public function isIncludesOrderThankYouPageWidget()
+    {
+        return $this->routeAppHelper->isIncludesOrderThankYouPageWidget();
+    }
+
+    /**
+     * Get Route thank you page
+     *
+     * @return mixed
+     */
+    public function getThankYouPageWidget()
+    {
+        return $this->routeAppHelper->getThankYouPageWidget();
+    }
+
+
+    /**
      * Check if merchant is Route Plus
      *
      * @return bool

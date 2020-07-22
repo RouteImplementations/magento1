@@ -27,14 +27,16 @@ abstract class Route_Route_Model_Api_RouteClient
 {
 
     const LIVE_API_URL = 'https://api.route.com/v1/';
-
     const SANDBOX_API_URL = "https://api-stage.route.com/v1/";
+    
     const SUCCESS_HTTP_CODE = 200;
     const CREATED_HTTP_CODE = 201;
     const CONFLICT_HTTP_CODE = 409;
     const NOT_FOUND_HTTP_CODE = 404;
+
     const DEFAULT_TIMEOUT = 10;
     const SENTRY_TIMEOUT = 5;
+    
     const GET_METHOD = "GET";
     const POST_METHOD = "POST";
 
@@ -160,9 +162,10 @@ abstract class Route_Route_Model_Api_RouteClient
      *
      * @return string
      */
-    public function getRouteApiUrl($path)
+    public function getRouteApiUrl($path="")
     {
-        return self::LIVE_API_URL . $path;
+        $url = ($this->_helper->isDevMode() ? self::SANDBOX_API_URL : self::LIVE_API_URL);
+        return $url . $path;
     }
 
     /**

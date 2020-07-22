@@ -1,0 +1,20 @@
+<?php
+if ($this->isIncludesOrderThankYouPageWidget()) :
+    $response = $this->getThankYouPageWidget();
+    if ($response &&
+        isset($response['asset_settings']['asset_content']['raw_html']) &&
+        isset($response['asset_settings']['asset_content']['css_url'])) :
+
+        $raw_html = $response['asset_settings']['asset_content']['raw_html'];
+        $css = $response['asset_settings']['asset_content']['css_url'];
+        ?>
+        <script src="https://cdn.routeapp.io/route-analytics/route-analytics.js"></script>
+        <link rel="stylesheet" href="<?php echo $css; ?>" type="text/css"></link>
+        <div>
+            <?php echo $raw_html; ?>
+        </div>
+    <?php
+    endif;
+endif;
+?>
+
