@@ -181,6 +181,11 @@
                         if(typeof amazonPaymentsMageCheckout != "undefined" && typeof amazonPaymentsMageCheckout.setReview == "function"){
                             amazonPaymentsMageCheckout.setReview()
                         }
+                        if(typeof jQuery == "function" && typeof jQuery.lotusbreath == "object" && typeof jQuery.lotusbreath.onestepcheckout == "function"){
+                            jQuery('#payment_partial dt input:radio:checked').length ?
+                            jQuery('#payment_partial dt input:radio:checked').click() :
+                            jQuery('#payment_partial dt input:radio:visible').eq(0).click();
+                        }
                     } catch(e) {
                         //console.log(e);
                     }
